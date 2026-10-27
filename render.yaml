@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: smart-battery-api
+    runtime: python
+    plan: free
+    buildCommand: python -m pip install --upgrade pip setuptools wheel && pip install -r requirements-api.txt
+    startCommand: gunicorn backend.api:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: FRONTEND_ORIGIN
+        fromService:
+          type: web
+          name: smart-battery-frontend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-1.5-flash
+      - key: OPENAI_EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: OPENAI_CHAT_MODEL
+        value: gpt-4.1-mini
+
+  - type: web
+    name: smart-battery-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      - key: CI
+        value: false
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: smart-battery-api
+          envVarKey: RENDER_EXTERNAL_URL

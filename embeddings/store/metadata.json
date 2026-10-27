@@ -1,0 +1,7 @@
+{
+  "provider": "local",
+  "model_name": "hashing-v1",
+  "dimension": 256,
+  "document_count": 30,
+  "faiss_enabled": false
+}

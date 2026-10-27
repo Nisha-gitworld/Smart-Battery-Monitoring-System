@@ -1,0 +1,483 @@
+[
+  {
+    "id": 1,
+    "topic": "overheating during charging",
+    "content": "Battery heating during charging is often caused by high ambient temperature, fast charging, excessive charging current, or elevated internal resistance. Persistent heat accelerates lithium-ion degradation and may trigger safety protections.",
+    "tags": [
+      "temperature",
+      "charging",
+      "thermal",
+      "safety"
+    ],
+    "severity": "high",
+    "recommendation": "Charge in a ventilated area, reduce charging current when possible, and inspect the battery if heating happens repeatedly.",
+    "cause": "High current flow and poor heat dissipation increase internal losses.",
+    "effect": "Faster aging, reduced cycle life, and possible shutdown events.",
+    "confidence": 0.95,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 2,
+    "topic": "overcharging",
+    "content": "Overcharging stresses lithium-ion cells by increasing voltage beyond the preferred operating window. This can accelerate electrolyte decomposition and raise internal pressure.",
+    "tags": [
+      "charging",
+      "overcharge",
+      "voltage"
+    ],
+    "severity": "high",
+    "recommendation": "Use chargers with auto cut-off and avoid bypassing the battery management system.",
+    "cause": "Charging beyond the safe upper voltage limit.",
+    "effect": "Capacity loss, thermal stress, and safety risk.",
+    "confidence": 0.94,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 3,
+    "topic": "deep discharge",
+    "content": "Deep discharge happens when a battery is drained below its safe minimum voltage. Repeated deep discharge can permanently damage cell chemistry and reduce available capacity.",
+    "tags": [
+      "discharge",
+      "voltage",
+      "capacity"
+    ],
+    "severity": "high",
+    "recommendation": "Recharge before the battery reaches a critically low state of charge and enable low-voltage cut-off protection.",
+    "cause": "Battery drained below safe voltage threshold.",
+    "effect": "Permanent capacity loss and poor recharge performance.",
+    "confidence": 0.93,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 4,
+    "topic": "fast discharge",
+    "content": "Rapid battery drain can indicate aging cells, high internal resistance, background loads, or temperature stress. It usually appears as shorter runtime under normal usage.",
+    "tags": [
+      "discharge",
+      "performance",
+      "diagnosis"
+    ],
+    "severity": "medium",
+    "recommendation": "Check for abnormal loads, compare runtime against baseline, and test battery impedance if available.",
+    "cause": "Aging, parasitic load, or resistance growth.",
+    "effect": "Reduced runtime and unstable voltage under load.",
+    "confidence": 0.9,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 5,
+    "topic": "battery swelling",
+    "content": "Swelling indicates gas buildup inside the cell, usually due to internal chemical breakdown, overheating, or prolonged overvoltage stress. A swollen battery should be treated as hazardous.",
+    "tags": [
+      "safety",
+      "failure",
+      "swelling"
+    ],
+    "severity": "critical",
+    "recommendation": "Stop using the battery immediately, isolate it safely, and dispose of it through an approved battery recycling channel.",
+    "cause": "Internal chemical decomposition and gas generation.",
+    "effect": "Severe safety risk, leakage, and possible fire.",
+    "confidence": 0.99,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 6,
+    "topic": "internal resistance",
+    "content": "Internal resistance rises as batteries age and as electrodes degrade. Higher resistance causes heat generation, voltage sag, and reduced power delivery.",
+    "tags": [
+      "electrical",
+      "performance",
+      "resistance"
+    ],
+    "severity": "medium",
+    "recommendation": "Track impedance trends over time and replace cells that show persistent resistance increase.",
+    "cause": "Material aging and interface degradation.",
+    "effect": "Lower efficiency, heat, and voltage drop.",
+    "confidence": 0.92,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 7,
+    "topic": "charging habits",
+    "content": "Maintaining lithium-ion batteries between roughly 20 percent and 80 percent state of charge can reduce long-term stress compared with frequent full cycles.",
+    "tags": [
+      "charging",
+      "optimization",
+      "best-practice"
+    ],
+    "severity": "low",
+    "recommendation": "Avoid keeping the battery at 100 percent for long periods unless full capacity is required immediately.",
+    "cause": "High average state of charge increases chemical stress.",
+    "effect": "Faster calendar aging when stored full.",
+    "confidence": 0.88,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 8,
+    "topic": "high ambient temperature",
+    "content": "Operating or charging in hot environments speeds up unwanted side reactions inside the battery and can magnify degradation even when other usage is normal.",
+    "tags": [
+      "temperature",
+      "environment",
+      "degradation"
+    ],
+    "severity": "high",
+    "recommendation": "Keep the battery away from direct sunlight and high-temperature enclosures.",
+    "cause": "Elevated ambient heat raises cell temperature.",
+    "effect": "Cycle life reduction and thermal instability.",
+    "confidence": 0.95,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 9,
+    "topic": "low temperature charging",
+    "content": "Charging lithium-ion batteries at very low temperatures can cause lithium plating, which damages the cell and increases safety risk.",
+    "tags": [
+      "temperature",
+      "charging",
+      "cold"
+    ],
+    "severity": "high",
+    "recommendation": "Warm the battery into its approved charging range before charging.",
+    "cause": "Slow ion diffusion at low temperature.",
+    "effect": "Lithium plating and irreversible capacity loss.",
+    "confidence": 0.94,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 10,
+    "topic": "voltage sag under load",
+    "content": "A battery that experiences strong voltage drop under load may have increased internal resistance, low state of charge, or degraded cells unable to sustain peak current.",
+    "tags": [
+      "voltage",
+      "load",
+      "diagnosis"
+    ],
+    "severity": "medium",
+    "recommendation": "Measure voltage at rest and under load, then inspect resistance and load demand.",
+    "cause": "Resistance increase or insufficient charge reserve.",
+    "effect": "Unexpected shutdown and weak power output.",
+    "confidence": 0.91,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 11,
+    "topic": "capacity fade",
+    "content": "Capacity fade is the gradual loss of the amount of charge a battery can store. It is driven by cycling, calendar aging, heat, and operation near voltage extremes.",
+    "tags": [
+      "capacity",
+      "aging",
+      "performance"
+    ],
+    "severity": "medium",
+    "recommendation": "Track usable capacity over time and control heat and voltage exposure.",
+    "cause": "Side reactions consume active lithium and damage electrodes.",
+    "effect": "Shorter runtime and reduced energy storage.",
+    "confidence": 0.93,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 12,
+    "topic": "calendar aging",
+    "content": "Batteries age even when not heavily used. Time spent at high temperature or high state of charge can reduce capacity even during storage.",
+    "tags": [
+      "storage",
+      "aging",
+      "temperature"
+    ],
+    "severity": "medium",
+    "recommendation": "Store batteries partly charged in a cool, dry place when they are not in service.",
+    "cause": "Long-term chemical side reactions during storage.",
+    "effect": "Capacity loss without many cycles.",
+    "confidence": 0.9,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 13,
+    "topic": "cell imbalance",
+    "content": "In multi-cell packs, imbalance appears when one cell drifts in voltage or capacity relative to the others. The weakest cell then limits pack performance and safety margins.",
+    "tags": [
+      "pack",
+      "balancing",
+      "diagnosis"
+    ],
+    "severity": "high",
+    "recommendation": "Monitor per-cell voltage and use balancing circuitry during charging.",
+    "cause": "Uneven aging, manufacturing variation, or thermal differences.",
+    "effect": "Premature cut-off, overcharge risk, and reduced pack capacity.",
+    "confidence": 0.92,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 14,
+    "topic": "battery management system failure",
+    "content": "A failing BMS can misread temperature, voltage, or current and may no longer enforce safe operating limits. This can make a healthy battery appear faulty or allow unsafe use.",
+    "tags": [
+      "bms",
+      "electronics",
+      "safety"
+    ],
+    "severity": "critical",
+    "recommendation": "Validate sensor readings, inspect protection logic, and replace or repair the BMS before continued use.",
+    "cause": "Sensor drift, firmware issues, or damaged circuitry.",
+    "effect": "Incorrect charging behavior and unsafe pack operation.",
+    "confidence": 0.96,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 15,
+    "topic": "high charge current",
+    "content": "Aggressive charging rates can reduce charging time but also increase heat and electrochemical stress, especially in aged batteries or poorly cooled systems.",
+    "tags": [
+      "charging",
+      "current",
+      "thermal"
+    ],
+    "severity": "medium",
+    "recommendation": "Use manufacturer-approved charge rates and taper current when the battery is warm.",
+    "cause": "High current density during charging.",
+    "effect": "More heat, more stress, and shorter life.",
+    "confidence": 0.9,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 16,
+    "topic": "frequent fast charging",
+    "content": "Frequent fast charging increases battery temperature and time spent near the upper voltage range, both of which can accelerate degradation over months of use.",
+    "tags": [
+      "fast-charging",
+      "degradation",
+      "lifecycle"
+    ],
+    "severity": "medium",
+    "recommendation": "Reserve fast charging for convenience and use normal charging whenever time allows.",
+    "cause": "Combined high current and thermal stress.",
+    "effect": "Shorter cycle life.",
+    "confidence": 0.89,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 17,
+    "topic": "self-discharge",
+    "content": "A battery that loses charge unusually quickly while idle may have internal leakage, contamination, parasitic electronics, or severe aging.",
+    "tags": [
+      "storage",
+      "diagnosis",
+      "idle-loss"
+    ],
+    "severity": "medium",
+    "recommendation": "Measure standby current draw and compare self-discharge against a known-good pack.",
+    "cause": "Leakage paths or parasitic system consumption.",
+    "effect": "Unexpected low charge after storage.",
+    "confidence": 0.88,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 18,
+    "topic": "connector corrosion",
+    "content": "Corroded battery terminals or connectors increase contact resistance, which can create heat, intermittent faults, and poor charging efficiency.",
+    "tags": [
+      "hardware",
+      "resistance",
+      "maintenance"
+    ],
+    "severity": "medium",
+    "recommendation": "Clean or replace corroded contacts and protect them from moisture exposure.",
+    "cause": "Moisture, contamination, and oxidation.",
+    "effect": "Power loss and localized heating.",
+    "confidence": 0.87,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 19,
+    "topic": "thermal runaway warning",
+    "content": "Rapid uncontrolled temperature rise, smoke, venting, or swelling are warning signs of thermal runaway. This is an emergency condition requiring immediate isolation.",
+    "tags": [
+      "thermal",
+      "safety",
+      "emergency"
+    ],
+    "severity": "critical",
+    "recommendation": "Disconnect power if safe, isolate the pack, and follow emergency battery handling procedures.",
+    "cause": "Severe internal failure with self-heating feedback.",
+    "effect": "Fire, explosion, and equipment damage.",
+    "confidence": 0.99,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 20,
+    "topic": "state of health monitoring",
+    "content": "State of health combines indicators such as capacity retention, resistance growth, and cycle history to estimate how much the battery has aged.",
+    "tags": [
+      "soh",
+      "monitoring",
+      "analytics"
+    ],
+    "severity": "low",
+    "recommendation": "Use historical trends rather than one-time measurements when assessing battery health.",
+    "cause": "Health is multi-factor and evolves over time.",
+    "effect": "Better maintenance planning when tracked consistently.",
+    "confidence": 0.9,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 21,
+    "topic": "state of charge estimation drift",
+    "content": "State of charge estimates can drift when current sensing is inaccurate or the battery has aged beyond the assumptions of the estimation model.",
+    "tags": [
+      "soc",
+      "estimation",
+      "bms"
+    ],
+    "severity": "medium",
+    "recommendation": "Recalibrate estimation logic and validate current sensor accuracy.",
+    "cause": "Sensor error and outdated battery model assumptions.",
+    "effect": "Inaccurate remaining-runtime estimates.",
+    "confidence": 0.89,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 22,
+    "topic": "storage at full charge",
+    "content": "Leaving lithium-ion batteries at 100 percent charge for long periods increases chemical stress and contributes to calendar aging.",
+    "tags": [
+      "storage",
+      "charging",
+      "aging"
+    ],
+    "severity": "medium",
+    "recommendation": "Store near mid-level charge when long-term storage is expected.",
+    "cause": "High voltage exposure over time.",
+    "effect": "Faster capacity fade.",
+    "confidence": 0.91,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 23,
+    "topic": "storage fully empty",
+    "content": "Storing a battery fully empty can let it fall below safe recovery voltage, especially if natural self-discharge continues during storage.",
+    "tags": [
+      "storage",
+      "deep-discharge",
+      "maintenance"
+    ],
+    "severity": "high",
+    "recommendation": "Check stored batteries periodically and recharge before they reach critically low voltage.",
+    "cause": "Self-discharge during extended storage.",
+    "effect": "Potential unrecoverable cell damage.",
+    "confidence": 0.9,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 24,
+    "topic": "abnormal charging time",
+    "content": "A battery that suddenly takes much longer or much shorter to charge may have lost capacity, developed sensor issues, or encountered a charger fault.",
+    "tags": [
+      "charging",
+      "diagnosis",
+      "timing"
+    ],
+    "severity": "medium",
+    "recommendation": "Compare charger output, pack temperature, and measured capacity to baseline behavior.",
+    "cause": "Capacity change, charger fault, or inaccurate sensing.",
+    "effect": "Inconsistent charging performance.",
+    "confidence": 0.86,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 25,
+    "topic": "high load stress",
+    "content": "Repeated high-current discharge raises internal temperature and can accelerate wear, especially if the pack was not designed for sustained peak loads.",
+    "tags": [
+      "load",
+      "current",
+      "stress"
+    ],
+    "severity": "medium",
+    "recommendation": "Match battery specification to load profile and improve cooling for high-power applications.",
+    "cause": "Sustained current demand above comfortable operating level.",
+    "effect": "Heat, voltage sag, and accelerated aging.",
+    "confidence": 0.89,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 26,
+    "topic": "sensor mismatch",
+    "content": "If voltage, current, or temperature sensors report inconsistent values, the diagnosis may point to instrumentation issues rather than real battery faults.",
+    "tags": [
+      "sensors",
+      "diagnosis",
+      "data-quality"
+    ],
+    "severity": "medium",
+    "recommendation": "Validate sensor calibration before acting on suspicious analytics output.",
+    "cause": "Sensor drift, placement issues, or wiring faults.",
+    "effect": "Incorrect health assessment and false alarms.",
+    "confidence": 0.87,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 27,
+    "topic": "recommendation for overheating",
+    "content": "When a battery heats while charging, the most likely first checks are charger compatibility, ambient temperature, ventilation, and whether the pack already has elevated resistance from age.",
+    "tags": [
+      "overheating",
+      "recommendation",
+      "charging"
+    ],
+    "severity": "high",
+    "recommendation": "Pause charging, let the pack cool, inspect charger rating, and avoid enclosed charging spaces.",
+    "cause": "Heat from charging losses or environmental conditions.",
+    "effect": "Higher degradation risk if repeated.",
+    "confidence": 0.94,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 28,
+    "topic": "recommendation for fast discharge",
+    "content": "If users report fast discharge, compare current draw, battery age, and operating temperature. Many cases come from either hidden load demand or capacity fade.",
+    "tags": [
+      "fast-discharge",
+      "recommendation",
+      "diagnosis"
+    ],
+    "severity": "medium",
+    "recommendation": "Profile system load and benchmark capacity against the battery's earlier performance.",
+    "cause": "Load increase or degraded capacity.",
+    "effect": "Perceived sudden runtime loss.",
+    "confidence": 0.9,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 29,
+    "topic": "safe disposal",
+    "content": "Damaged, swollen, leaking, or thermally stressed batteries must not be thrown into regular waste. They require controlled disposal or recycling according to local regulations.",
+    "tags": [
+      "safety",
+      "disposal",
+      "compliance"
+    ],
+    "severity": "critical",
+    "recommendation": "Place the battery in a non-flammable container if needed and use an approved recycling or hazardous waste channel.",
+    "cause": "Failed batteries can remain chemically unstable.",
+    "effect": "Environmental and fire risk if disposed of improperly.",
+    "confidence": 0.98,
+    "source": "Battery knowledge base"
+  },
+  {
+    "id": 30,
+    "topic": "preventive maintenance routine",
+    "content": "A practical maintenance routine includes logging charge cycles, temperature peaks, impedance trends, and unusual events such as swelling or sudden shutdowns.",
+    "tags": [
+      "maintenance",
+      "monitoring",
+      "best-practice"
+    ],
+    "severity": "low",
+    "recommendation": "Review battery trends regularly and act on gradual deterioration before safety symptoms appear.",
+    "cause": "Trend monitoring helps detect hidden degradation early.",
+    "effect": "Better reliability and earlier intervention.",
+    "confidence": 0.91,
+    "source": "Battery knowledge base"
+  }
+]
