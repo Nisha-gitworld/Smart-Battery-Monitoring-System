@@ -215,23 +215,25 @@ export default function App() {
         {/* Right Status & Tools */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {/* Backend Health Badge */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              fontSize: '0.725rem',
-              color: backendHealth?.status === 'healthy' ? '#34d399' : '#f43f5e',
-              background: backendHealth?.status === 'healthy' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)',
-              border: `1px solid ${backendHealth?.status === 'healthy' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
-              padding: '4px 10px',
-              borderRadius: 20,
-            }}
-            title={backendHealth?.status === 'healthy' ? 'Backend API connected' : 'Backend offline'}
-          >
-            <span className={`pulse-dot ${backendHealth?.status === 'healthy' ? 'online' : 'busy'}`} />
-            <span>{backendHealth?.status === 'healthy' ? 'API Online' : 'Connecting API...'}</span>
-          </div>
+          
+            
+           <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: '0.725rem',
+                color: ['healthy', 'running'].includes(backendHealth?.status) ? '#34d399' : '#f43f5e',
+                background: ['healthy', 'running'].includes(backendHealth?.status) ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)',
+                border: `1px solid ${['healthy', 'running'].includes(backendHealth?.status) ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
+                padding: '4px 10px',
+                borderRadius: 20,
+              }}
+              title={['healthy', 'running'].includes(backendHealth?.status) ? 'Backend API connected' : 'Backend offline'}
+            >
+              <span className={`pulse-dot ${['healthy', 'running'].includes(backendHealth?.status) ? 'online' : 'busy'}`} />
+              <span>{['healthy', 'running'].includes(backendHealth?.status) ? 'API Online' : 'Connecting API...'}</span>
+            </div>
 
           {/* Model Info Button */}
           <button
