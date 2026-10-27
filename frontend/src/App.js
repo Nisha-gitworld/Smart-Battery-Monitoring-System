@@ -66,7 +66,7 @@ export default function App() {
     } catch (err) {
       setError(
         err.response?.data?.error ||
-          'Inference request failed. Verify that backend/api.py is running on port 5001.'
+          'Prediction request failed: ${err.message}. Check the API URL and backend logs.'
       );
     } finally {
       setLoading(false);
