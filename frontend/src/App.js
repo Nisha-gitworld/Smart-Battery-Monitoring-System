@@ -215,9 +215,8 @@ export default function App() {
         {/* Right Status & Tools */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {/* Backend Health Badge */}
-          
-            
-           <div
+
+            <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
