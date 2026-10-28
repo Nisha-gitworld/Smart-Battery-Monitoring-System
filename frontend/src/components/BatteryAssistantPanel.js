@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { queryRagAssistant } from '../services/apiService';
 
 const PROMPT_CATEGORIES = [
   {
@@ -44,17 +44,12 @@ export default function BatteryAssistantPanel() {
     setCopied(false);
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || '';
-      const result = await axios.post(`${apiUrl}/rag/query`, {
-        query: q,
-        top_k: 3,
-        provider: 'auto',
-      });
-      setResponse(result.data);
+      const result = await queryRagAssistant(q, 3, 'auto');
+      setResponse(result);
     } catch (err) {
       setError(
         err.response?.data?.error ||
-          'Battery assistant request failed. Ensure the Flask backend is active on port 5001.'
+          'Battery assistant request failed. Ensure the Flask backend is active or check your connection.'
       );
     } finally {
       setLoading(false);
@@ -69,17 +64,17 @@ export default function BatteryAssistantPanel() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ fontSize: '1.25rem' }}>🤖</span>
-            <h3 style={{ fontSize: '1.15rem', color: '#f8fafc', margin: 0 }}>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--text-main)', margin: 0, fontWeight: 800 }}>
               Retrieval-Augmented Diagnostic Assistant (RAG)
             </h3>
           </div>
-          <p style={{ color: '#94a3b8', fontSize: '0.825rem', marginTop: 3 }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.825rem', marginTop: 4 }}>
             Query the empirical battery safety and electro-chemical failure repository with citation grounding.
           </p>
         </div>
@@ -89,53 +84,55 @@ export default function BatteryAssistantPanel() {
             style={{
               fontSize: '0.725rem',
               fontWeight: 700,
-              color: '#34d399',
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              padding: '4px 10px',
+              color: 'var(--accent-emerald)',
+              background: 'rgba(5, 150, 105, 0.12)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(5, 150, 105, 0.35)',
+              padding: '5px 12px',
               borderRadius: 20,
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
+              boxShadow: 'var(--glass-specular-inset)',
             }}
           >
-            <span className="pulse-dot online" /> Grounded Retrieval
+            <span className="pulse-dot online" /> Grounded Retrieval Active
           </span>
         </div>
       </div>
 
       {/* Suggested Prompt Chips */}
       <div>
-        <div style={{ fontSize: '0.725rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <div style={{ fontSize: '0.725rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.06em', marginBottom: 10 }}>
           💡 Domain Research Queries
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {PROMPT_CATEGORIES.flatMap((c) => c.questions).map((q) => (
-            <button
-              key={q}
-              onClick={() => {
-                setQuery(q);
-                handleAsk(q);
-              }}
-              style={{
-                background: query === q ? 'rgba(56, 189, 248, 0.15)' : 'rgba(15, 23, 42, 0.55)',
-                color: query === q ? '#38bdf8' : '#cbd5e1',
-                border: query === q ? '1px solid #38bdf8' : '1px solid rgba(148, 163, 184, 0.18)',
-                borderRadius: 20,
-                padding: '5px 12px',
-                fontSize: '0.75rem',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              {q}
-            </button>
-          ))}
+          {PROMPT_CATEGORIES.flatMap((c) => c.questions).map((q) => {
+            const isSelected = query === q;
+            return (
+              <button
+                key={q}
+                onClick={() => {
+                  setQuery(q);
+                  handleAsk(q);
+                }}
+                className={`scenario-btn ${isSelected ? 'active' : ''}`}
+                style={{
+                  borderRadius: 20,
+                  padding: '6px 14px',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                }}
+              >
+                {q}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Input Form */}
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      {/* Input Form with Glass Styling */}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <input
           type="text"
           value={query}
@@ -143,14 +140,14 @@ export default function BatteryAssistantPanel() {
           onKeyDown={(e) => e.key === 'Enter' && handleAsk()}
           placeholder="Ask a technical battery question (e.g., 'What happens if electrolyte evaporates?')..."
           className="custom-input"
-          style={{ flex: 1, minWidth: 260, padding: '12px 16px', fontSize: '0.875rem' }}
+          style={{ flex: 1, minWidth: 260, padding: '13px 18px', fontSize: '0.9rem' }}
           disabled={loading}
         />
         <button
           onClick={() => handleAsk()}
           disabled={loading}
           className="btn-primary"
-          style={{ padding: '12px 20px', minWidth: 140 }}
+          style={{ padding: '13px 24px', minWidth: 150 }}
         >
           {loading ? (
             <>
@@ -166,23 +163,51 @@ export default function BatteryAssistantPanel() {
 
       {/* Error alert */}
       {error && (
-        <div style={{ background: 'rgba(244, 63, 94, 0.1)', border: '1px solid rgba(244, 63, 94, 0.3)', borderRadius: 8, padding: '10px 14px', color: '#fb7185', fontSize: '0.8rem' }}>
+        <div
+          className="glass-nested-card"
+          style={{
+            background: 'rgba(225, 29, 72, 0.12)',
+            borderColor: 'rgba(225, 29, 72, 0.35)',
+            padding: '12px 16px',
+            color: 'var(--accent-rose)',
+            fontSize: '0.825rem',
+          }}
+        >
           ⚠️ {error}
         </div>
       )}
 
       {/* Grounded Response */}
       {response && (
-        <div style={{ background: 'rgba(10, 16, 31, 0.75)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: 12, padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div
+          className="glass-nested-card"
+          style={{
+            padding: 22,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+          }}
+        >
           {/* Answer Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(148, 163, 184, 0.12)', paddingBottom: 10 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: '1rem' }}>💬</span>
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--glass-border-subtle)', paddingBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: '1.15rem' }}>💬</span>
+              <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--accent-blue)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Synthesized Answer
               </span>
               {response.provider && (
-                <span style={{ fontSize: '0.7rem', color: '#64748b', background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: 4 }}>
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                    color: 'var(--accent-indigo)',
+                    background: 'rgba(79, 70, 229, 0.12)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1px solid rgba(79, 70, 229, 0.3)',
+                    padding: '2px 8px',
+                    borderRadius: 6,
+                  }}
+                >
                   Engine: {response.provider}
                 </span>
               )}
@@ -190,72 +215,65 @@ export default function BatteryAssistantPanel() {
 
             <button
               onClick={copyToClipboard}
-              style={{
-                background: 'transparent',
-                border: '1px solid rgba(148, 163, 184, 0.2)',
-                borderRadius: 6,
-                color: copied ? '#34d399' : '#94a3b8',
-                fontSize: '0.725rem',
-                padding: '4px 8px',
-                cursor: 'pointer',
-              }}
+              className="btn-glass-secondary"
+              style={{ padding: '4px 10px', fontSize: '0.725rem' }}
             >
               {copied ? '✓ Copied' : '📋 Copy Answer'}
             </button>
           </div>
 
           {/* Answer Text */}
-          <div style={{ fontSize: '0.9rem', lineHeight: 1.65, color: '#f1f5f9' }}>
+          <div style={{ fontSize: '0.925rem', lineHeight: 1.7, color: 'var(--text-main)' }}>
             {response.answer}
           </div>
 
           {/* Retrieved Context Cards */}
           {response.retrieved_documents?.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 4 }}>
-              <div style={{ fontSize: '0.725rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 6 }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 📚 Retrieved Knowledge Chunks ({response.retrieved_documents.length})
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
                 {response.retrieved_documents.map((doc, idx) => (
                   <div
                     key={doc.id || idx}
+                    className="glass-nested-card"
                     style={{
-                      background: 'rgba(15, 23, 42, 0.5)',
-                      border: '1px solid rgba(148, 163, 184, 0.15)',
-                      borderRadius: 8,
-                      padding: '10px 12px',
+                      padding: '12px 14px',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: 4,
+                      gap: 6,
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#f8fafc' }}>
+                      <span style={{ fontSize: '0.825rem', fontWeight: 700, color: 'var(--text-main)' }}>
                         {doc.topic}
                       </span>
                       <span
                         style={{
                           fontSize: '0.675rem',
                           fontWeight: 700,
-                          color: doc.severity === 'CRITICAL' ? '#f43f5e' : doc.severity === 'HIGH' ? '#f59e0b' : '#34d399',
-                          background: 'rgba(0,0,0,0.3)',
-                          padding: '2px 6px',
-                          borderRadius: 4,
+                          color: doc.severity === 'CRITICAL' ? 'var(--accent-rose)' : doc.severity === 'HIGH' ? 'var(--accent-amber)' : 'var(--accent-emerald)',
+                          background: 'var(--bg-card-glass)',
+                          backdropFilter: 'blur(6px)',
+                          border: `1px solid ${doc.severity === 'CRITICAL' ? 'rgba(225,29,72,0.35)' : doc.severity === 'HIGH' ? 'rgba(217,119,6,0.35)' : 'rgba(5,150,105,0.35)'}`,
+                          padding: '2px 8px',
+                          borderRadius: 6,
                         }}
                       >
                         {doc.severity}
                       </span>
                     </div>
 
-                    <div style={{ fontSize: '0.775rem', color: '#94a3b8', lineHeight: 1.45 }}>
+                    <div style={{ fontSize: '0.785rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                       {doc.recommendation}
                     </div>
 
                     {doc.score !== undefined && (
-                      <div style={{ fontSize: '0.675rem', color: '#64748b', marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
+                      <div style={{ fontSize: '0.675rem', color: 'var(--text-muted)', marginTop: 4, display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--glass-border-subtle)', paddingTop: 6 }}>
                         <span>Relevance Match:</span>
-                        <span style={{ color: '#38bdf8', fontWeight: 600 }}>{(doc.score * 100).toFixed(1)}%</span>
+                        <span style={{ color: 'var(--accent-blue)', fontWeight: 700 }}>{(doc.score * 100).toFixed(1)}%</span>
                       </div>
                     )}
                   </div>

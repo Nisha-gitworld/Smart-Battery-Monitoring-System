@@ -4,41 +4,51 @@ const PRIORITY_THEME = {
   CRITICAL: {
     label: 'Critical Immediate Action',
     badgeClass: 'critical',
-    color: '#f43f5e',
-    borderColor: 'rgba(244, 63, 94, 0.35)',
-    bg: 'rgba(244, 63, 94, 0.08)',
+    color: '#e11d48',
+    borderColor: 'rgba(225, 29, 72, 0.45)',
+    borderTopColor: 'rgba(255, 255, 255, 0.6)',
+    bg: 'rgba(225, 29, 72, 0.08)',
+    glow: '0 0 16px rgba(225, 29, 72, 0.15)',
     icon: '🚨',
   },
   HIGH: {
     label: 'High Priority',
     badgeClass: 'warning',
-    color: '#f59e0b',
-    borderColor: 'rgba(245, 158, 11, 0.35)',
-    bg: 'rgba(245, 158, 11, 0.08)',
+    color: '#d97706',
+    borderColor: 'rgba(217, 119, 6, 0.45)',
+    borderTopColor: 'rgba(255, 255, 255, 0.6)',
+    bg: 'rgba(217, 119, 6, 0.08)',
+    glow: '0 0 16px rgba(217, 119, 6, 0.15)',
     icon: '⚠️',
   },
   MEDIUM: {
     label: 'Moderate Operational',
     badgeClass: 'moderate',
-    color: '#38bdf8',
-    borderColor: 'rgba(56, 189, 248, 0.35)',
-    bg: 'rgba(56, 189, 248, 0.08)',
+    color: '#0284c7',
+    borderColor: 'rgba(2, 132, 199, 0.45)',
+    borderTopColor: 'rgba(255, 255, 255, 0.6)',
+    bg: 'rgba(2, 132, 199, 0.08)',
+    glow: '0 0 16px rgba(2, 132, 199, 0.15)',
     icon: '🔧',
   },
   OPERATIONAL: {
     label: 'Operational Protocol',
     badgeClass: 'moderate',
-    color: '#818cf8',
-    borderColor: 'rgba(129, 140, 248, 0.35)',
-    bg: 'rgba(129, 140, 248, 0.08)',
+    color: '#4f46e5',
+    borderColor: 'rgba(79, 70, 229, 0.45)',
+    borderTopColor: 'rgba(255, 255, 255, 0.6)',
+    bg: 'rgba(79, 70, 229, 0.08)',
+    glow: '0 0 16px rgba(79, 70, 229, 0.15)',
     icon: '⚙️',
   },
   PREVENTIVE: {
     label: 'Preventive Best Practice',
     badgeClass: 'healthy',
-    color: '#10b981',
-    borderColor: 'rgba(16, 185, 129, 0.35)',
-    bg: 'rgba(16, 185, 129, 0.08)',
+    color: '#059669',
+    borderColor: 'rgba(5, 150, 105, 0.45)',
+    borderTopColor: 'rgba(255, 255, 255, 0.6)',
+    bg: 'rgba(5, 150, 105, 0.08)',
+    glow: '0 0 16px rgba(5, 150, 105, 0.15)',
     icon: '🛡️',
   },
 };
@@ -50,13 +60,13 @@ export default function RecommendationsPanel({ prediction }) {
   if (!prediction) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', alignItems: 'center', minHeight: 280, textAlign: 'center', padding: 20 }}>
-        <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: 12 }}>
+        <div style={{ width: 54, height: 54, borderRadius: '50%', background: 'rgba(5, 150, 105, 0.12)', backdropFilter: 'blur(10px)', border: '1px solid rgba(5, 150, 105, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', marginBottom: 12, boxShadow: '0 0 20px rgba(5, 150, 105, 0.15)' }}>
           🛡️
         </div>
-        <h4 style={{ fontSize: '1rem', color: '#f8fafc', marginBottom: 6 }}>
+        <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)', marginBottom: 6, fontWeight: 700 }}>
           Actionable Advisory System
         </h4>
-        <p style={{ fontSize: '0.825rem', color: '#94a3b8', maxWidth: 360, lineHeight: 1.5 }}>
+        <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', maxWidth: 360, lineHeight: 1.5 }}>
           Engineering recommendations tailored to detected thermal and degradation conditions will appear here.
         </p>
       </div>
@@ -105,31 +115,20 @@ export default function RecommendationsPanel({ prediction }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: '1.2rem' }}>📋</span>
-            <h3 style={{ fontSize: '1.1rem', color: '#f8fafc', margin: 0 }}>
+            <span style={{ fontSize: '1.25rem' }}>📋</span>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--text-main)', margin: 0, fontWeight: 800 }}>
               AI Maintenance Advisory & Action Plan
             </h3>
           </div>
-          <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: 3 }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.825rem', marginTop: 4 }}>
             Synthesized domain guidelines for prolonging cell health and ensuring safety.
           </p>
         </div>
 
         <button
           onClick={exportDiagnosticReport}
-          style={{
-            background: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.3)',
-            borderRadius: 6,
-            color: '#38bdf8',
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            padding: '5px 12px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-          }}
+          className="btn-glass-secondary"
+          style={{ padding: '6px 14px', fontSize: '0.75rem' }}
         >
           <span>📥</span> Export Report (.json)
         </button>
@@ -137,55 +136,81 @@ export default function RecommendationsPanel({ prediction }) {
 
       {/* Priority Filters */}
       {prioritiesFound.length > 1 && (
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: 6,
+            flexWrap: 'wrap',
+            background: 'var(--bg-nested-glass)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid var(--glass-border-subtle)',
+            borderRadius: 10,
+            padding: 4,
+            width: 'fit-content',
+          }}
+        >
           <button
             onClick={() => setFilterPriority('ALL')}
             style={{
-              background: filterPriority === 'ALL' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(15, 23, 42, 0.6)',
-              color: filterPriority === 'ALL' ? '#38bdf8' : '#94a3b8',
-              border: '1px solid rgba(148, 163, 184, 0.15)',
+              background: filterPriority === 'ALL' ? 'rgba(2, 132, 199, 0.16)' : 'transparent',
+              color: filterPriority === 'ALL' ? 'var(--accent-blue)' : 'var(--text-secondary)',
+              border: filterPriority === 'ALL' ? '1px solid var(--accent-blue)' : '1px solid transparent',
               borderRadius: 6,
-              padding: '3px 9px',
+              padding: '4px 10px',
               fontSize: '0.725rem',
               fontWeight: 600,
               cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
             All Actions ({recommendations.length})
           </button>
-          {prioritiesFound.map((p) => (
-            <button
-              key={p}
-              onClick={() => setFilterPriority(p)}
-              style={{
-                background: filterPriority === p ? 'rgba(56, 189, 248, 0.2)' : 'rgba(15, 23, 42, 0.6)',
-                color: filterPriority === p ? '#38bdf8' : '#94a3b8',
-                border: '1px solid rgba(148, 163, 184, 0.15)',
-                borderRadius: 6,
-                padding: '3px 9px',
-                fontSize: '0.725rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              {p}
-            </button>
-          ))}
+          {prioritiesFound.map((p) => {
+            const isSelected = filterPriority === p;
+            return (
+              <button
+                key={p}
+                onClick={() => setFilterPriority(p)}
+                style={{
+                  background: isSelected ? 'rgba(2, 132, 199, 0.16)' : 'transparent',
+                  color: isSelected ? 'var(--accent-blue)' : 'var(--text-secondary)',
+                  border: isSelected ? '1px solid var(--accent-blue)' : '1px solid transparent',
+                  borderRadius: 6,
+                  padding: '4px 10px',
+                  fontSize: '0.725rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                {p}
+              </button>
+            );
+          })}
         </div>
       )}
 
       {/* Recommendations List */}
       {filteredRecs.length === 0 ? (
-        <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: 10, padding: 16, textAlign: 'center' }}>
-          <div style={{ color: '#34d399', fontWeight: 700, fontSize: '0.9rem', marginBottom: 4 }}>
+        <div
+          className="glass-nested-card"
+          style={{
+            background: 'rgba(5, 150, 105, 0.1)',
+            borderColor: 'rgba(5, 150, 105, 0.3)',
+            borderTopColor: 'var(--glass-border-specular)',
+            padding: 18,
+            textAlign: 'center',
+          }}
+        >
+          <div style={{ color: 'var(--accent-emerald)', fontWeight: 700, fontSize: '0.925rem', marginBottom: 4 }}>
             ✓ Battery Cell is Operating Within Optimal Envelope
           </div>
-          <div style={{ color: '#94a3b8', fontSize: '0.8rem' }}>
+          <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
             No critical anomalies detected. Continue routine periodic telemetry logging.
           </div>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {filteredRecs.map((rec, idx) => {
             const theme = PRIORITY_THEME[rec.priority] || PRIORITY_THEME.OPERATIONAL;
             const isDone = !!completedActions[idx];
@@ -193,16 +218,18 @@ export default function RecommendationsPanel({ prediction }) {
             return (
               <div
                 key={idx}
+                className="glass-nested-card"
                 style={{
-                  background: isDone ? 'rgba(15, 23, 42, 0.3)' : theme.bg,
-                  border: `1px solid ${isDone ? 'rgba(148, 163, 184, 0.1)' : theme.borderColor}`,
-                  borderRadius: 10,
-                  padding: '12px 14px',
+                  background: isDone ? 'var(--bg-nested-glass)' : theme.bg,
+                  borderColor: isDone ? 'var(--glass-border-subtle)' : theme.borderColor,
+                  borderTopColor: isDone ? 'var(--glass-border-specular)' : theme.borderTopColor,
+                  boxShadow: isDone ? 'none' : `${theme.glow}, var(--glass-specular-inset)`,
+                  padding: '14px 16px',
                   display: 'flex',
-                  gap: 12,
+                  gap: 14,
                   alignItems: 'flex-start',
                   transition: 'all 0.2s ease',
-                  opacity: isDone ? 0.6 : 1,
+                  opacity: isDone ? 0.55 : 1,
                 }}
               >
                 {/* Interactive Checkbox */}
@@ -213,22 +240,22 @@ export default function RecommendationsPanel({ prediction }) {
                   style={{
                     marginTop: 3,
                     cursor: 'pointer',
-                    width: 16,
-                    height: 16,
-                    accentColor: '#38bdf8',
+                    width: 17,
+                    height: 17,
+                    accentColor: 'var(--accent-blue)',
                   }}
                   title="Mark as executed"
                 />
 
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 5 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span>{theme.icon}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                      <span style={{ fontSize: '1.1rem' }}>{theme.icon}</span>
                       <span
                         style={{
-                          fontSize: '0.85rem',
+                          fontSize: '0.875rem',
                           fontWeight: 700,
-                          color: isDone ? '#94a3b8' : '#f8fafc',
+                          color: isDone ? 'var(--text-muted)' : 'var(--text-main)',
                           textDecoration: isDone ? 'line-through' : 'none',
                         }}
                       >
@@ -240,10 +267,11 @@ export default function RecommendationsPanel({ prediction }) {
                       style={{
                         fontSize: '0.675rem',
                         fontWeight: 700,
-                        padding: '2px 8px',
-                        borderRadius: 4,
+                        padding: '3px 9px',
+                        borderRadius: 6,
                         color: theme.color,
-                        background: 'rgba(0,0,0,0.3)',
+                        background: 'var(--bg-card-glass)',
+                        backdropFilter: 'blur(8px)',
                         border: `1px solid ${theme.borderColor}`,
                       }}
                     >
@@ -251,13 +279,13 @@ export default function RecommendationsPanel({ prediction }) {
                     </span>
                   </div>
 
-                  <div style={{ fontSize: '0.775rem', color: '#cbd5e1' }}>
-                    <strong style={{ color: '#94a3b8' }}>Reason: </strong>
+                  <div style={{ fontSize: '0.785rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                    <strong style={{ color: 'var(--text-main)' }}>Reason: </strong>
                     {rec.reason}
                   </div>
 
-                  <div style={{ fontSize: '0.75rem', color: '#38bdf8' }}>
-                    <strong style={{ color: '#94a3b8' }}>Expected Impact: </strong>
+                  <div style={{ fontSize: '0.765rem', color: 'var(--accent-blue)' }}>
+                    <strong style={{ color: 'var(--text-secondary)' }}>Expected Impact: </strong>
                     {rec.impact}
                   </div>
                 </div>
@@ -268,7 +296,7 @@ export default function RecommendationsPanel({ prediction }) {
       )}
 
       {/* Human-AI Teamwork Note */}
-      <div style={{ fontSize: '0.725rem', color: '#64748b', borderTop: '1px solid rgba(148, 163, 184, 0.1)', paddingTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+      <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)', borderTop: '1px solid var(--glass-border-subtle)', paddingTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
         <span>🤝</span>
         <span>Recommendations are generated dynamically by coupling SHAP feature thresholds with NASA Battery Prognostics criteria.</span>
       </div>

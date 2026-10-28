@@ -5,7 +5,7 @@ const SCENARIOS = [
     id: 'nominal',
     name: 'Nominal / Healthy',
     badge: 'Healthy Cell',
-    color: '#10b981',
+    color: '#059669',
     data: {
       Voltage_measured: 3.95,
       Current_measured: -1.0,
@@ -26,7 +26,7 @@ const SCENARIOS = [
     id: 'high_load',
     name: 'High Load Discharge',
     badge: 'Heavy Drain',
-    color: '#38bdf8',
+    color: '#0284c7',
     data: {
       Voltage_measured: 3.52,
       Current_measured: -2.5,
@@ -47,7 +47,7 @@ const SCENARIOS = [
     id: 'thermal_stress',
     name: 'Thermal Stress (48°C)',
     badge: 'Elevated Temp',
-    color: '#f59e0b',
+    color: '#d97706',
     data: {
       Voltage_measured: 3.72,
       Current_measured: -1.8,
@@ -68,7 +68,7 @@ const SCENARIOS = [
     id: 'degraded',
     name: 'Severe Degradation (EOL)',
     badge: 'Critical Age',
-    color: '#f43f5e',
+    color: '#e11d48',
     data: {
       Voltage_measured: 3.15,
       Current_measured: -0.7,
@@ -162,58 +162,56 @@ export default function PredictionPanel({
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ fontSize: '1.25rem' }}>⚡</span>
-            <h3 style={{ fontSize: '1.15rem', color: '#f8fafc', margin: 0 }}>
+            <h3 style={{ fontSize: '1.2rem', color: 'var(--text-main)', margin: 0, fontWeight: 800 }}>
               Battery Health Predictor & Telemetry Input
             </h3>
           </div>
-          <p style={{ color: '#94a3b8', fontSize: '0.825rem', marginTop: 4 }}>
-            Input measured electro-chemical parameters or test preset degradation profiles.
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.825rem', marginTop: 4 }}>
+            Input measured electro-chemical parameters or choose from standard diagnostic test profiles.
           </p>
         </div>
 
         {/* Live parameter alert badges */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {temp >= 45 && (
-            <span className="status-pill critical" title="High temperature accelerates SEI growth">
+            <span className="status-pill critical" title="High temperature accelerates SEI layer degradation">
               🔥 Overheating: {temp}°C
             </span>
           )}
           {volt < 3.3 && (
-            <span className="status-pill warning" title="Low cell voltage approaching cutoff">
+            <span className="status-pill warning" title="Low cell voltage approaching cutoff limit">
               ⚠️ Voltage Sag: {volt}V
             </span>
           )}
           {imp >= 0.25 && (
-            <span className="status-pill critical" title="Elevated internal resistance detected">
+            <span className="status-pill critical" title="Elevated internal impedance detected">
               ⚡ High Impedance: {imp}Ω
             </span>
           )}
         </div>
       </div>
 
-      {/* Preset Scenario Selector */}
-      <div style={{ background: 'rgba(10, 16, 31, 0.65)', border: '1px solid rgba(148, 163, 184, 0.1)', borderRadius: 12, padding: 14 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#38bdf8', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            🎯 Test Profiles & Scenarios
+      {/* Preset Scenario Selector Glass Card */}
+      <div
+        className="glass-nested-card"
+        style={{
+          padding: 16,
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-blue)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+            🎯 Standard Diagnostic Scenarios
           </span>
           <button
             onClick={randomizeValues}
-            style={{
-              background: 'transparent',
-              border: '1px solid rgba(148, 163, 184, 0.2)',
-              borderRadius: 6,
-              color: '#94a3b8',
-              fontSize: '0.725rem',
-              padding: '3px 8px',
-              cursor: 'pointer',
-            }}
+            className="btn-glass-secondary"
+            style={{ padding: '4px 10px', fontSize: '0.725rem' }}
           >
             🎲 Randomize Telemetry
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
           {SCENARIOS.map((sc) => {
             const isSelected = activeScenario === sc.id;
             return (
@@ -225,73 +223,87 @@ export default function PredictionPanel({
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  gap: 3,
-                  padding: '9px 12px',
+                  gap: 4,
+                  padding: '10px 14px',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.8rem', color: isSelected ? sc.color : '#e2e8f0' }}>
+                  <span style={{ fontWeight: 700, fontSize: '0.825rem', color: isSelected ? sc.color : 'var(--text-main)' }}>
                     {sc.name}
                   </span>
                 </div>
-                <span style={{ fontSize: '0.675rem', color: '#64748b' }}>{sc.badge}</span>
+                <span style={{ fontSize: '0.675rem', color: 'var(--text-muted)' }}>{sc.badge}</span>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div style={{ display: 'flex', gap: 6, borderBottom: '1px solid rgba(148, 163, 184, 0.12)', paddingBottom: 8 }}>
+      {/* Filter Tabs in Glass Container */}
+      <div
+        style={{
+          display: 'flex',
+          gap: 6,
+          background: 'var(--bg-nested-glass)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid var(--glass-border-subtle)',
+          borderRadius: 12,
+          padding: 4,
+          width: 'fit-content',
+        }}
+      >
         {[
           { id: 'all', label: 'All Parameters (13)' },
           { id: 'core', label: 'Core Volt / Amp / Temp' },
           { id: 'load', label: 'Load & Time' },
           { id: 'impedance', label: 'Impedance & Charging' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveCategory(tab.id)}
-            style={{
-              background: activeCategory === tab.id ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
-              color: activeCategory === tab.id ? '#38bdf8' : '#94a3b8',
-              border: activeCategory === tab.id ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid transparent',
-              borderRadius: 6,
-              padding: '4px 10px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            {tab.label}
-          </button>
-        ))}
+        ].map((tab) => {
+          const isActive = activeCategory === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveCategory(tab.id)}
+              style={{
+                background: isActive
+                  ? 'rgba(2, 132, 199, 0.16)'
+                  : 'transparent',
+                color: isActive ? 'var(--accent-blue)' : 'var(--text-secondary)',
+                border: isActive ? '1px solid var(--accent-blue)' : '1px solid transparent',
+                borderRadius: 8,
+                padding: '6px 14px',
+                fontSize: '0.75rem',
+                fontWeight: isActive ? 700 : 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Parameter Inputs Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
         {filterFields.map(([field, value]) => {
           const meta = PARAMETER_META[field] || { label: field, unit: '', step: 0.1, desc: '' };
           return (
             <div
               key={field}
+              className="glass-nested-card"
               style={{
-                background: 'rgba(15, 23, 42, 0.45)',
-                border: '1px solid rgba(148, 163, 184, 0.1)',
-                borderRadius: 8,
-                padding: '9px 12px',
+                padding: '12px 14px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 5,
+                gap: 6,
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label style={{ fontSize: '0.725rem', fontWeight: 600, color: '#cbd5e1' }} title={meta.desc}>
+                <label style={{ fontSize: '0.725rem', fontWeight: 600, color: 'var(--text-main)' }} title={meta.desc}>
                   {meta.label}
                 </label>
                 {meta.unit && (
-                  <span style={{ fontSize: '0.675rem', color: '#64748b', fontWeight: 700 }}>
+                  <span style={{ fontSize: '0.675rem', color: 'var(--accent-blue)', fontWeight: 700 }}>
                     [{meta.unit}]
                   </span>
                 )}
@@ -310,16 +322,27 @@ export default function PredictionPanel({
       </div>
 
       {/* Predict Action Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 4, flexWrap: 'wrap', gap: 12 }}>
-        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
-          ML Pipeline: Random Forest Regression + TreeExplainer SHAP
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: 6,
+          flexWrap: 'wrap',
+          gap: 14,
+          paddingTop: 14,
+          borderTop: '1px solid var(--glass-border-subtle)',
+        }}
+      >
+        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+          ML Pipeline: Random Forest Ensemble + TreeExplainer SHAP
         </div>
 
         <button
           onClick={onPredict}
           disabled={loading}
           className="btn-primary"
-          style={{ minWidth: 220 }}
+          style={{ minWidth: 240 }}
         >
           {loading ? (
             <>
@@ -328,7 +351,7 @@ export default function PredictionPanel({
             </>
           ) : (
             <>
-              <span>⚡</span> Run Battery Health Diagnosis
+              <span style={{ fontSize: '1.1rem' }}>⚡</span> Run Battery Health Diagnosis
             </>
           )}
         </button>

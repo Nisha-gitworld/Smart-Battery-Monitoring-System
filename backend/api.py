@@ -5,8 +5,11 @@ import logging
 import os
 from pathlib import Path
 import sys
+import threading
+import time
+import urllib.request
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import joblib
 import numpy as np
@@ -29,7 +32,14 @@ CONFIG_PATH = Path(__file__).parent.parent / "config" / "config.yaml"
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     CONFIG = yaml.safe_load(f)
 
-app = Flask(__name__)
+FRONTEND_BUILD_DIR = Path(__file__).parent.parent / "frontend" / "build"
+STATIC_DIR = FRONTEND_BUILD_DIR / "static"
+
+app = Flask(
+    __name__,
+    static_folder=str(STATIC_DIR) if STATIC_DIR.exists() else None,
+    static_url_path="/static",
+)
 
 
 def build_cors_origins():
@@ -38,17 +48,14 @@ def build_cors_origins():
         for origin in os.environ.get("FRONTEND_ORIGIN", "").split(",")
         if origin.strip()
     ]
-    default_origins = [
-        "https://smart-battery-frontend.onrender.com",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
-    return sorted(set(configured_origins + default_origins))
+    if configured_origins:
+        return configured_origins
+    return "*"
 
 
 CORS(
     app,
-    resources={r"/*": {"origins": build_cors_origins()}},
+    resources={r"/*": {"origins": "*"}},
     methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
 )
@@ -103,8 +110,25 @@ def load_knowledge_base():
         return False
 
 
-@app.route("/", methods=["GET"])
-def home():
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_client(path):
+    # Don't intercept registered API routes
+    api_prefixes = ("health", "predict", "batch_predict", "model_info", "rag", "keepalive")
+    if any(path == prefix or path.startswith(f"{prefix}/") for prefix in api_prefixes):
+        return jsonify({"error": f"API endpoint /{path} not found"}), 404
+
+    # Serve static assets from build directory if they exist (favicon, logo, manifest, etc.)
+    target_path = FRONTEND_BUILD_DIR / path
+    if path and target_path.exists() and not target_path.is_dir():
+        return send_from_directory(str(FRONTEND_BUILD_DIR), path)
+
+    # Serve compiled React index.html for root and SPA routes
+    index_file = FRONTEND_BUILD_DIR / "index.html"
+    if index_file.exists():
+        return send_from_directory(str(FRONTEND_BUILD_DIR), "index.html")
+
+    # Fallback to API status JSON if no frontend build is present
     return jsonify({
         "service": "Smart Battery Tracking API",
         "status": "running",
@@ -114,6 +138,7 @@ def home():
             "batch_predict": "/batch_predict",
             "model_info": "/model_info",
             "rag_query": "/rag/query",
+            "keepalive": "/keepalive",
         },
     })
 
@@ -125,6 +150,16 @@ def health():
         "timestamp": datetime.now().isoformat(),
         "model_loaded": MODEL is not None,
         "rag_loaded": KNOWLEDGE_BASE is not None,
+    })
+
+
+@app.route("/keepalive", methods=["GET"])
+def keepalive_endpoint():
+    return jsonify({
+        "status": "active",
+        "timestamp": datetime.now().isoformat(),
+        "interval_seconds": 600,
+        "message": "Render keep-alive monitor running",
     })
 
 
@@ -284,9 +319,55 @@ def calculate_confidence(explanation):
         return 0.5
 
 
+def keepalive(interval_seconds=600):
+    """
+    Background worker that periodically pings the backend service to prevent
+    free hosting instances (such as Render) from sleeping due to inactivity.
+    Render free tier instances sleep after 15 minutes of inactivity; pinging
+    every 10 minutes (600s) keeps the instance warm and continuously active.
+    """
+    # Wait 45s for the HTTP server to finish binding and starting up
+    time.sleep(45)
+
+    base_url = (
+        os.environ.get("RENDER_EXTERNAL_URL")
+        or (f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}" if os.environ.get("RENDER_EXTERNAL_HOSTNAME") else None)
+        or (f"https://{os.environ['SPACE_HOST']}" if os.environ.get("SPACE_HOST") else None)
+        or os.environ.get("KEEPALIVE_URL")
+        or "https://smart-battery-api.onrender.com"
+    ).rstrip("/")
+    ping_url = f"{base_url}/health"
+
+    logger.info(f"[KeepAlive] Initiated monitor. Pinging {ping_url} every {interval_seconds}s.")
+
+    while True:
+        try:
+            req = urllib.request.Request(
+                ping_url,
+                headers={"User-Agent": "Render-KeepAlive-Worker/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                logger.info(f"[KeepAlive] Health ping delivered: {ping_url} (HTTP {resp.status})")
+        except Exception as e:
+            logger.warning(f"[KeepAlive] Health ping exception: {e}")
+
+        time.sleep(interval_seconds)
+
+
+def start_keepalive():
+    """Launch the keepalive monitor in a background daemon thread."""
+    for t in threading.enumerate():
+        if t.name == "RenderKeepAliveThread":
+            return
+    t = threading.Thread(target=keepalive, args=(600,), daemon=True, name="RenderKeepAliveThread")
+    t.start()
+    logger.info("[KeepAlive] Background keepalive thread started.")
+
+
 load_model_artifacts()
 load_knowledge_base()
+start_keepalive()
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 7860))
     app.run(host="0.0.0.0", port=port)

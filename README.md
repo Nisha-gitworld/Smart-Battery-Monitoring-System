@@ -1,4 +1,14 @@
- # Smart Battery Monitoring System with Explainable AI
+---
+title: BatteryIQ - Smart Battery Monitoring System
+emoji: 🔋
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
+# Smart Battery Monitoring System with Explainable AI
 
 A research-driven intelligent battery analytics platform for battery health prediction, Remaining Useful Life (RUL) estimation, explainable AI, and retrieval-augmented battery guidance.
 
