@@ -29,7 +29,7 @@ export const getApiUrl = () => {
       return DEFAULT_LOCAL_BACKEND;
     }
     // Unified hosting (e.g. Hugging Face Spaces: same origin serves frontend + API)
-    if (host.includes('hf.space') || host.includes('huggingface.co')) {
+    if (host.includes('onrender.com') || host.includes('hf.space') || host.includes('huggingface.co')) {
       return window.location.origin;
     }
   }
