@@ -1,6 +1,6 @@
 # ==============================================================================
 # Multi-stage Dockerfile: Unified React Frontend + Flask Backend
-# Configured for Hugging Face Spaces (Port 7860, UID 1000) & Container Deployments
+# Compatible with Render ($PORT / 10000) & Hugging Face Spaces (Port 7860)
 # ==============================================================================
 
 # ----------------- Stage 1: Build React Frontend -----------------
@@ -35,13 +35,13 @@ COPY . .
 # Copy built frontend assets from Stage 1 into frontend/build
 COPY --from=frontend-builder /app/frontend/build /app/frontend/build
 
-# Hugging Face Spaces requirement: run as non-root user with UID 1000
+# Setup user (Hugging Face Spaces UID 1000 compatibility)
 RUN useradd -m -u 1000 user && \
     chown -R user:user /app
 USER user
 
-# Hugging Face Spaces listens on port 7860
+# Support dynamic port assignment (Render uses $PORT, Hugging Face uses 7860)
 ENV PORT=7860
-EXPOSE 7860
+EXPOSE 7860 10000
 
-CMD ["gunicorn", "backend.api:app", "--bind", "0.0.0.0:7860", "--workers", "2", "--timeout", "120"]
+CMD sh -c "gunicorn backend.api:app --bind 0.0.0.0:${PORT:-7860} --workers 2 --timeout 120"
